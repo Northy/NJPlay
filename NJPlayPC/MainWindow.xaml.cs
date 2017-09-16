@@ -26,7 +26,6 @@ namespace NJPlayPC
         DispatcherTimer activityTimer;
         DispatcherTimer timerTs;
         TimeSpan activityThreshold = TimeSpan.FromSeconds(3);
-        TimeSpan lastMouseMove;
         bool isHidden = false;
         bool isPlaying = false;
         bool isFullscreen = false;
