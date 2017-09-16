@@ -1,0 +1,41 @@
+﻿<Window x:Class="NJPlayPC.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NJPlayPC"
+        mc:Ignorable="d"
+        Title="NJPlay" Height="720" Width="1280" MinHeight="720" MinWidth="1280" AllowDrop="True" Drop="Window_Drop" KeyDown="Window_KeyDown">
+    <Grid>
+        <MediaElement x:Name="mediaElement1" Stretch="Fill" HorizontalAlignment="Left" Height="auto" MinHeight="689" VerticalAlignment="Top" Width="auto"  MinWidth="1272" Volume="1.4" Grid.ColumnSpan="2" MediaOpened="mediaElement1_MediaOpened" ScrubbingEnabled="True"/>
+        <Button x:Name="btnFullscreen"  HorizontalAlignment="Right" Margin="0,25,25,0" VerticalAlignment="Top" Height="40" Width="40" Click="BtnFullscreen_Click" Focusable="False">
+            <Button.Template>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="images/fullscreen.png"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="btnPlay" HorizontalAlignment="Left" Margin="30,0,0,25" VerticalAlignment="Bottom" Height="40" Width="40" Click="BtnPlay_Click" Focusable="False">
+            <Button.Template>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="images/play.png"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button x:Name="btnPause" Content="Button" HorizontalAlignment="Left" Margin="90,0,0,25" VerticalAlignment="Bottom" Height="40" Width="40" Click="BtnPause_Click" Focusable="False">
+            <Button.Template>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="images/pause.png"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Slider x:Name="sliderSeek" HorizontalAlignment="Stretch" Margin="154,0,130,30" VerticalAlignment="Bottom" Height="auto" Width="auto" MinHeight="26" MinWidth="976" Grid.ColumnSpan="2" ValueChanged="sliderSeek_ValueChanged" Focusable="False" IsMoveToPointEnabled="True"/>
+        <Slider x:Name="sliderVolume" HorizontalAlignment="Right" Margin="0,0,10,30" VerticalAlignment="Bottom" Height="auto" Width="auto" MinHeight="26" MinWidth="114" SmallChange="0.01" Maximum="1" Value="0.7" ValueChanged="sliderVolume_ValueChanged" Grid.Column="1" LargeChange="0.1" Focusable="False" IsMoveToPointEnabled="True"/>
+    </Grid>
+</Window>
