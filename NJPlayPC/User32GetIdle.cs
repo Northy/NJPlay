@@ -25,20 +25,6 @@ namespace NJPlayPC
                 throw new Win32Exception(Marshal.GetLastWin32Error());
         }
 
-        public static TimeSpan GetLastMouseClick()
-        {
-            var plii1 = new LASTINPUTINFO();
-            plii1.cbSize = (uint)Marshal.SizeOf(plii1);
-
-            if (GetLastInputInfo(ref plii1))
-            {
-                int mouseClickIdleTime = unchecked(Environment.TickCount - (int)plii1.dwTime);
-                return TimeSpan.FromMilliseconds(mouseClickIdleTime);
-            }
-            else
-                throw new Win32Exception(Marshal.GetLastWin32Error());
-        }
-
         [DllImport("user32.dll", SetLastError = true)]
         static extern bool GetLastInputInfo(ref LASTINPUTINFO plii);
 

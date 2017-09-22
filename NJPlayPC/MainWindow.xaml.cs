@@ -114,7 +114,7 @@ namespace NJPlayPC
 
         private void sliderSeek_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (User32GetIdle.GetLastMouseClick() <= TimeSpan.FromMilliseconds(500))
+            if (User32GetIdle.GetLastInput() <= TimeSpan.FromMilliseconds(500))
             {
                 mediaElement1.Pause();
                 timerTs.Stop();
