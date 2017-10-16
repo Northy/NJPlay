@@ -275,15 +275,15 @@ namespace NJPlayPC
                 {
                     MessageBox.Show("Controler connected", "NJPlay", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-                if (STR.ReadLine() == "vDown")
+                else if (receive == "vDown")
                 {
                     sliderVolume.Value = sliderVolume.Value - (sliderVolume.LargeChange / 2);
                 }
-                if (STR.ReadLine() == "vUp")
+                else if (receive == "vUp")
                 {
                     sliderVolume.Value = sliderVolume.Value + (sliderVolume.LargeChange / 2);
                 }
-                if (STR.ReadLine() == "skip")
+                else if (receive == "skip")
                 {
                     mediaElement1.Pause();
                     timerTs.Stop();
@@ -291,7 +291,7 @@ namespace NJPlayPC
                     mediaElement1.Play();
                     timerTs.Start();
                 }
-                if (STR.ReadLine() == "return")
+                else if (receive == "return")
                 {
                     mediaElement1.Pause();
                     timerTs.Stop();
@@ -299,7 +299,7 @@ namespace NJPlayPC
                     mediaElement1.Play();
                     timerTs.Start();
                 }
-                if (STR.ReadLine() == "playpause")
+                else if (receive == "playpause")
                 {
                     if (isPlaying)
                     {
