@@ -17,6 +17,15 @@
                 </ControlTemplate>
             </Button.Template>
         </Button>
+        <Button x:Name="btnConnect" Content="Button" HorizontalAlignment="Right" Margin="0,90,25,0" VerticalAlignment="Top" Width="40" Height="40" Focusable="False" Click="btnConnect_Click">
+            <Button.Template>
+                <ControlTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="images/connecticon.png"/>
+                    </StackPanel>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <Button x:Name="btnPlay" HorizontalAlignment="Left" Margin="30,0,0,25" VerticalAlignment="Bottom" Height="40" Width="40" Click="BtnPlay_Click" Focusable="False">
             <Button.Template>
                 <ControlTemplate>
@@ -37,5 +46,29 @@
         </Button>
         <Slider x:Name="sliderSeek" HorizontalAlignment="Stretch" Margin="154,0,130,30" VerticalAlignment="Bottom" Height="auto" Width="auto" MinHeight="26" MinWidth="976" Grid.ColumnSpan="2" ValueChanged="sliderSeek_ValueChanged" Focusable="False" IsMoveToPointEnabled="True"/>
         <Slider x:Name="sliderVolume" HorizontalAlignment="Right" Margin="0,0,10,30" VerticalAlignment="Bottom" Height="auto" Width="auto" MinHeight="26" MinWidth="114" SmallChange="0.01" Maximum="1" Value="0.7" ValueChanged="sliderVolume_ValueChanged" Grid.Column="1" LargeChange="0.1" Focusable="False" IsMoveToPointEnabled="True"/>
+        
+        
+        <Grid x:Name="StartServerPrompt" Visibility="Collapsed">
+            <Grid Background="Black" Opacity="0.5"/>
+            <Border
+            MinWidth="250"
+            Background="Orange" 
+            BorderBrush="Black" 
+            BorderThickness="1" 
+            CornerRadius="0,55,0,55" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Center">
+                <StackPanel>
+                    <TextBlock Margin="5" Text="Server IP:" FontWeight="Bold" FontFamily="Cambria" />
+                    <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="sIP"/>
+                    <TextBlock Margin="5" Text="Server Port:" FontWeight="Bold" FontFamily="Cambria" />
+                    <TextBox MinWidth="150" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="sPort"/>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button x:Name="btnStartServer" Margin="5" Content="Start Server" Background="{x:Null}" Click="btnStartServer_Click"/>
+                        <Button x:Name="btnCancel" Margin="5" Content="Cancel" Background="{x:Null}" Click="btnCancel_Click" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

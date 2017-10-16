@@ -15,6 +15,11 @@ using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Threading;
 using System.Globalization;
+using System.Net;
+using System.Net.Sockets;
+using System.ComponentModel;
+using WinForms = System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace NJPlayPC
 {
@@ -32,9 +37,29 @@ namespace NJPlayPC
         bool isMaximized;
         double h;
         double w;
+        private TcpClient client;
+        public StreamReader STR;
+        public StreamWriter STW;
+        public string receive;
+        public String input_to_send;
+        public BackgroundWorker worker1 = new BackgroundWorker();
+        public BackgroundWorker worker2 = new BackgroundWorker();
+
         public MainWindow()
         {
             InitializeComponent();
+
+            IPAddress[] localIP = Dns.GetHostAddresses(Dns.GetHostName());
+            foreach (IPAddress address in localIP)
+            {
+                if (address.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    sIP.Text = address.ToString();
+                }
+            }
+
+            worker1.DoWork += Worker1_DoWork;
+            worker2.DoWork += worker2_DoWork;
 
             activityTimer = new DispatcherTimer();
             activityTimer.Tick += new EventHandler(activityWorker_Tick);
@@ -122,6 +147,11 @@ namespace NJPlayPC
                 mediaElement1.Play();
                 timerTs.Start();
             }
+            if (sliderSeek.Value == sliderSeek.Maximum)
+            {
+                sliderSeek.Value = 0;
+                mediaElement1.Position = TimeSpan.FromTicks(0);
+            }
             else { return; }
         }
 
@@ -200,6 +230,91 @@ namespace NJPlayPC
                 }
             }
             return;
+        }
+
+        private void btnStartServer_Click(object sender, RoutedEventArgs e)
+        {
+            StartServerPrompt.Visibility = Visibility.Collapsed;
+            btnConnect.Visibility = Visibility.Collapsed;
+            TcpListener listener = new TcpListener(IPAddress.Any, int.Parse(sPort.Text));
+            listener.Start();
+            client = listener.AcceptTcpClient();
+            STR = new StreamReader(client.GetStream());
+            STW = new StreamWriter(client.GetStream());
+            STW.AutoFlush = true;
+
+            worker1.RunWorkerAsync();
+            worker2.WorkerSupportsCancellation = true;
+        }
+
+        private void btnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            StartServerPrompt.Visibility = Visibility.Collapsed;
+            sPort.Text = String.Empty;
+        }
+
+        private void btnConnect_Click(object sender, RoutedEventArgs e)
+        {
+            StartServerPrompt.Visibility = Visibility.Visible;
+        }
+
+        private void worker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            STW.WriteLine(input_to_send);
+            STW.Flush();
+            input_to_send = "";
+            worker2.CancelAsync();
+        }
+
+        private void Worker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (client.Connected)
+            {
+                receive = STR.ReadLine();
+                if (receive == "connected")
+                {
+                    MessageBox.Show("Controler connected", "NJPlay", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                if (STR.ReadLine() == "vDown")
+                {
+                    sliderVolume.Value = sliderVolume.Value - (sliderVolume.LargeChange / 2);
+                }
+                if (STR.ReadLine() == "vUp")
+                {
+                    sliderVolume.Value = sliderVolume.Value + (sliderVolume.LargeChange / 2);
+                }
+                if (STR.ReadLine() == "skip")
+                {
+                    mediaElement1.Pause();
+                    timerTs.Stop();
+                    mediaElement1.Position = TimeSpan.FromSeconds(sliderSeek.Value + sliderSeek.Value / 20);
+                    mediaElement1.Play();
+                    timerTs.Start();
+                }
+                if (STR.ReadLine() == "return")
+                {
+                    mediaElement1.Pause();
+                    timerTs.Stop();
+                    mediaElement1.Position = TimeSpan.FromSeconds(sliderSeek.Value - sliderSeek.Value / 20);
+                    mediaElement1.Play();
+                    timerTs.Start();
+                }
+                if (STR.ReadLine() == "playpause")
+                {
+                    if (isPlaying)
+                    {
+                        mediaElement1.Pause();
+                        timerTs.Stop();
+                        isPlaying = false;
+                    }
+                    else
+                    {
+                        mediaElement1.Play();
+                        timerTs.Start();
+                        isPlaying = true;
+                    }
+                }
+            }
         }
     }
 }
